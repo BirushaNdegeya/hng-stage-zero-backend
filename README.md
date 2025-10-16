@@ -24,23 +24,27 @@ A RESTful API endpoint that serves profile information combined with dynamic cat
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/BirushaNdegeya/hng-stage-zero-backend.git
    cd hng-stage-zero-backend
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 3. Create a `.env` file in the root directory:
+
    ```env
    PORT=3000
    FUN_FACT_API=https://catfact.ninja
    ```
 
 4. Start the development server:
+
    ```bash
    pnpm run dev
    ```
@@ -53,9 +57,11 @@ A RESTful API endpoint that serves profile information combined with dynamic cat
 ## API Endpoints
 
 ### GET /
+
 Returns basic API information.
 
 **Response:**
+
 ```json
 {
   "message": "HNG Stage Zero Backend Task API is running 🚀",
@@ -65,9 +71,11 @@ Returns basic API information.
 ```
 
 ### GET /me
+
 Returns user profile with a dynamic cat fact and current timestamp.
 
 **Response:**
+
 ```json
 {
   "status": "success",
@@ -98,6 +106,18 @@ Returns user profile with a dynamic cat fact and current timestamp.
 - `nodemon`: Automatic server restart during development
 
 ## Testing
+
+Test the endpoints using curl:
+
+```bash
+# Test root endpoint
+curl https://hng-stage-zero-backend-flax.vercel.app/
+
+# Test /me endpoint
+curl https://hng-stage-zero-backend-flax.vercel.app/me
+```
+
+## Testing Locally
 
 Test the endpoints using curl:
 

@@ -1,7 +1,7 @@
 {
   "name": "hng-stage-zero-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A RESTful API endpoint that serves profile information combined with dynamic cat facts from an external API. This project demonstrates API integration, JSON response formatting, and dynamic data handling. ",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,12 @@
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Express",
+    "HNG",
+    "internship"
+  ],
+  "author": "BirushaNdegeya",
   "license": "ISC",
   "packageManager": "pnpm@10.14.0",
   "dependencies": {
