@@ -54,10 +54,16 @@ app.get("/me", async function (req, res) {
   }
 });
 
-app.listen(port, function () {
-  console.log(`
+// Export the app for Vercel
+export default app;
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, function () {
+    console.log(`
 ========================================
 APP [STATUS:RUNNING] ON PORT ::: ${port}
 ========================================
-  `);
-});
+    `);
+  });
+}
