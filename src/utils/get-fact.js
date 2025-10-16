@@ -12,11 +12,23 @@
  */
 export async function getFact(baseURL) {
   try {
-    const response = await fetch(`${baseURL}/fact`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+    const response = await fetch(`${baseURL}/fact`, {
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
     return data.fact;
   } catch (error) {
     console.error("Error fetching cat fact:", error);
-    return null;
+    throw error; // Re-throw to let caller handle
   }
 }

@@ -1,13 +1,28 @@
 import express from "express";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import { getFact } from "./utils/get-fact.js";
 
 const app = express();
-dotenv.config({ quiet: true });
-const port = process.env.PORT;
-const base = process.env.FUN_FACT_API;
+app.use(cors()); // Enable CORS for all routes
 
-app.get("/", function (_, res) {
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    status: "error",
+    message: "Too many requests from this IP, please try again later."
+  }
+});
+app.use(limiter);
+
+dotenv.config({ quiet: true });
+const port = process.env.PORT || 3000;
+const base = process.env.FUN_FACT_API || 'https://catfact.ninja';
+app.get("/", function (req, res) {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - ${req.ip}`);
   res.status(200).json({
     message: "HNG Stage Zero Backend Task API is running 🚀",
     nextStep: "Go to /me endpoint to view profile with dynamic cat facts",
@@ -15,24 +30,34 @@ app.get("/", function (_, res) {
   });
 });
 
-app.get("/me", async function (_, res) {
-  const fact = await getFact(base);
-  res.status(200).json({
-    status: "success",
-    user: {
-      email: "birushandegeya@gmail.com",
-      name: "Birusha Ndegeya",
-      stack: "NodeJS/ExpressJS, JavaScript/NextJS",
-    },
-    timestamp: "<current UTC time in ISO 8601 format>",
-    fact: fact,
-  });
+app.get("/me", async function (req, res) {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - ${req.ip}`);
+  try {
+    const fact = await getFact(base);
+    const timestamp = new Date().toISOString();
+    res.status(200).json({
+      status: "success",
+      user: {
+        email: "birushandegeya@gmail.com",
+        name: "Birusha Ndegeya",
+        stack: "Node.js/Express",
+      },
+      timestamp: timestamp,
+      fact: fact,
+    });
+  } catch (error) {
+    console.error(`[${new Date().toISOString()}] Error in /me endpoint:`, error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch cat fact",
+    });
+  }
 });
 
 app.listen(port, function () {
   console.log(`
-==========================================
+========================================
 APP [STATUS:RUNNING] ON PORT ::: ${port}
-==========================================
+========================================
   `);
 });
